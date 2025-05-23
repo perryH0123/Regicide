@@ -1,2 +1,47 @@
-/node_modules
-/dist
+# Node modules (installed dependencies)
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime files
+.env
+.env.*      # like .env.development, .env.local
+*.local.*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE settings
+.vscode/
+.idea/
+
+# Coverage output
+coverage/
+
+# Optional: lockfiles (if using a specific package manager)
+# Uncomment the one you DON'T use to avoid committing lockfiles for multiple managers
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Optional: typedoc output
+# docs/
+
+# Optional: test snapshots or debug files
+*.log
+*.tgz
+*.swp
+*.swo
