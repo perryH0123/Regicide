@@ -1,0 +1,5 @@
+{
+    "entryPoints": ["./src/**/*.{ts,d.ts}"],
+    "out": "./docs",
+    "name": "Regicide"
+}

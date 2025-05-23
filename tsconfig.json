@@ -1,0 +1,23 @@
+{
+  "include": [
+    "./src/**/*.{ts,d.ts}",
+    "./test/**/*.ts"
+  ],
+  
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    
+    "target": "esnext",
+    "module": "nodenext",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "dist"
+  }
+}

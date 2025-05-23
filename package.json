@@ -1,0 +1,37 @@
+{
+  "name": "regicide",
+  "private": true,
+  "homepage": "not added yet",
+  "license": "MIT",
+  "author": {
+    "name": "Perry Han",
+    "email": "me@perryh.com"
+  },
+  "type": "module",
+  "engines": {
+    "node": "^22.2.x"
+  },
+  "scripts": {
+    "test": "tsc || exit ; mocha --require source-map-support/register dist/test"
+  },
+  "mocha": {
+    "reporter": "spec",
+    "exit": true
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.323",
+    "@types/mocha": "^10.0.10",
+    "copy-webpack-plugin": "^13.0.0",
+    "eslint": "^9.27.0",
+    "mocha": "^11.4.0",
+    "ts-loader": "^9.5.2",
+    "typedoc": "^0.28.4",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "@techstark/opencv-js": "^4.10.0-release.1"
+  },
+  "main": "dist"
+}
