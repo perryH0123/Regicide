@@ -1,9 +1,19 @@
 {
     "manifest_version": 3,
     "name": "Regicide",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "beat your friends at LinkedIn queens",
     "icons": {
         "128": "images/regicide_extension-128.png"
+    },
+    "web_accessible_resources": [{
+        "resources": ["scripts/script.js"],
+        "matches": ["<all_urls>"]
+    }],
+    "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["injectScript.js"]
     }
+  ]
 }

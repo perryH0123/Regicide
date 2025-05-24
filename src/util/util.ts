@@ -1,5 +1,3 @@
-import assert from "node:assert";
-
 /**
  * Given an array of elements, return an array of all possible subsets of length items from the array
  * @param collection Array to find subsets in
@@ -25,7 +23,7 @@ export function combinationsOfArray<T>(collection: Array<T>, length: number): T[
         for (let i = start; i < collection.length; i++){
             const newCombination = currentCombination.slice();
             // add the ith element
-            newCombination.push(collection[i] ?? assert.fail());
+            newCombination.push(collection[i] ?? fail());
             combinationsRecursive(i+1, newCombination);
         }
         // if we got to this point, no new combinations were found before we hit a base case, just
@@ -39,4 +37,12 @@ export function combinationsOfArray<T>(collection: Array<T>, length: number): T[
 export function triggerMouseEvent(node: Element, eventType: string){
     const clickEvent = new Event(eventType, { bubbles: true, cancelable: true });
     node.dispatchEvent (clickEvent);
+}
+
+export function fail(msg?: string): never {
+    throw new Error(msg);
+}
+
+export function assert(predicate: boolean, msg?: string): void {
+    if (!predicate) throw new Error(msg);
 }

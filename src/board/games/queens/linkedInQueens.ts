@@ -1,8 +1,8 @@
-import { makeGrid } from "../../board.js";
-import assert from "node:assert";
-import { Grid2D, GridPuzzleGame, GridPuzzleSolver, SolveAlgorithm } from "../../boardTypes.js";
-import { QueensCell, QueensSATAlgorithm } from "./queens.js";
-import { triggerMouseEvent } from "../../../util/util.js";
+import { makeGrid } from "../../board";
+//import assert from "node:assert";
+import { Grid2D, GridPuzzleGame, GridPuzzleSolver, SolveAlgorithm } from "../../boardTypes";
+import { QueensCell, QueensSATAlgorithm } from "./queens";
+import { triggerMouseEvent } from "../../../util/util";
 
 export class LinkedInQueensSolver implements GridPuzzleSolver {
     private readonly client: GridPuzzleGame<QueensCell>;
@@ -25,6 +25,9 @@ export class LinkedInQueensSolver implements GridPuzzleSolver {
             const row = Math.floor(idx / width);
             const col = idx % width;
             if(sol.get(row,col).queen){
+                // click twice
+                triggerMouseEvent(e, "mousedown");
+                triggerMouseEvent(e, "mouseup");
                 triggerMouseEvent(e, "mousedown");
                 triggerMouseEvent(e, "mouseup");
             }
@@ -49,9 +52,12 @@ class LinkedInQueensClient implements GridPuzzleGame<QueensCell> {
         if(!Number.isInteger(width)) throw new Error("collected cells did not form a perfect grid");
         if(width === 0) throw new Error("no cells found");
         return makeGrid(width, width, cells).map((row, col, div) => {
-            const colorClass = Array.from(div.classList).filter(c => c.startsWith("cell-color-"))[0] ?? assert.fail("classes did not have color data");
+            const colorClass = Array.from(div.classList).filter(c => c.startsWith("cell-color-"))[0]
+            if(colorClass === undefined) throw new Error("classes did not have color data");
             const colorClassSplit = colorClass.split("-");
-            const color = parseInt(colorClassSplit[colorClassSplit.length-1]??assert.fail()); // last element of class
+            const colorStr = colorClassSplit[colorClassSplit.length-1];
+            if (colorStr === undefined) throw new Error();
+            const color = parseInt(colorStr); // last element of class
             if (Number.isNaN(color)) throw new Error(`can't parse color: ${color}`);
             let queen = false;
             const contentCell = div.getElementsByClassName("cell-content")[0];

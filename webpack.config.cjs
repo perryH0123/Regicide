@@ -6,6 +6,10 @@ module.exports = {
   output: {
     filename: "script.js",
     path: path.resolve(__dirname, "extension/scripts"),
+    library: {
+      type: "window"
+    },
+    iife: true
   },
   resolve: {
     extensions: [".ts", ".js"],

@@ -1,4 +1,5 @@
-import assert from "node:assert";
+import { fail } from "../util/util";
+
 class ContradictionError extends Error {}
 
 const DEFAULT_HUERISTIC = (clauses: Clause[]) => {
@@ -9,8 +10,8 @@ const DEFAULT_HUERISTIC = (clauses: Clause[]) => {
         else variableMap.set(variable, prev+1);
     }));
     const varNames = Array.from(variableMap.keys()).sort((a,b) => 
-        (variableMap.get(a) ?? assert.fail("should not get here")) 
-        - (variableMap.get(b) ?? assert.fail("should not get here"))
+        (variableMap.get(a) ?? fail("should not get here")) 
+        - (variableMap.get(b) ?? fail("should not get here"))
     );
     return varNames[0] ?? "NO CLAUSES";
 }
@@ -127,7 +128,7 @@ export class SatFormula {
         // recursive backtracking search with hueristic
         const testVar = this.hueristic(this.clauses.slice());
         if(!this.clauses.reduce((val, c) => c.variables().has(testVar) || val, false)) throw new Error(
-            "Hueristic didn't generate a variable in the formula, an infinite loop will occur"
+            `Hueristic didn't generate a variable in the formula (produced ${testVar}), an infinite loop will occur`
         );
         for (const testVal of [true, false]){
             const successfulAssignments = this.updateFormula(testVar, testVal)._satisfyingAssignment(sofar);
@@ -217,8 +218,8 @@ export class Clause {
      */
     public unitClause(): [string, boolean] | undefined {
         if (this.literalMap.size === 1){
-            const variable = this.literalMap.keys().next().value ?? assert.fail();
-            return [variable, this.literalMap.get(variable) ?? assert.fail()];
+            const variable = this.literalMap.keys().next().value ?? fail();
+            return [variable, this.literalMap.get(variable) ?? fail()];
         }
         return undefined
     }

@@ -1,8 +1,7 @@
-import { Clause, SatFormula } from "../../../sat/Sat.js";
-import { combinationsOfArray } from "../../../util/util.js";
-import { neighborsOfCell } from "../../board.js";
-import { Grid2D, SolveAlgorithm } from "../../boardTypes.js";
-import assert from "node:assert";
+import { Clause, SatFormula } from "../../../sat/Sat";
+import { combinationsOfArray, fail } from "../../../util/util";
+import { neighborsOfCell } from "../../board";
+import { Grid2D, SolveAlgorithm } from "../../boardTypes";
 
 export type QueensCell = {
     queen: boolean,
@@ -48,8 +47,8 @@ export class QueensSATAlgorithm implements SolveAlgorithm<QueensCell> {
     private static eachRegionHasExactlyQueen(regionMapping: RegionMapping): Clause[] {
         const clauses: Clause[] = [];
         for (const color of regionMapping.keys()){
-            const cellsInRegion = regionMapping.get(color) ?? assert.fail();
-            assert(cellsInRegion.length > 0, "a region must have at least one cell");
+            const cellsInRegion = regionMapping.get(color) ?? fail();
+            if(!(cellsInRegion.length > 0)) throw new Error("a region must have at least one cell");
             // at least one cell is true
             clauses.push(...QueensSATAlgorithm.exactlyOneConstraint(cellsInRegion));
         }
@@ -96,15 +95,15 @@ export class QueensSATAlgorithm implements SolveAlgorithm<QueensCell> {
         const hueristic: (clauses: Clause[]) => string = ((clauses: Clause[]) => {
             const vars: Set<string> = clauses.reduce((acc, clause) => acc.union(clause.variables()), new Set<string>());
             const colorZonesInOrder = Array.from(colorGroups.keys()).sort((a,b) => {
-                const cellsA = colorGroups.get(a) ?? assert.fail();
-                const cellsB = colorGroups.get(b) ?? assert.fail();
+                const cellsA = colorGroups.get(a) ?? fail();
+                const cellsB = colorGroups.get(b) ?? fail();
                 return cellsA.length - cellsB.length;
             });
             for (const color of colorZonesInOrder){
-                const cellsInZone = colorGroups.get(color)??assert.fail();
+                const cellsInZone = colorGroups.get(color)??fail();
                 for(const [row, col] of cellsInZone){
                     const strName = `${row},${col}`;
-                    if (strName in vars) return strName;
+                    if (vars.has(strName)) return strName;
                 }
             }
             return "out of clauses";

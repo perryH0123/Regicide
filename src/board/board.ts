@@ -1,5 +1,5 @@
-import { Grid2D } from "./boardTypes.js";
-import assert from "node:assert";
+import { assert, fail } from "../util/util";
+import { Grid2D } from "./boardTypes";
 
 class ArrayGrid<T> implements Grid2D<T>{
     private readonly values: T[];
@@ -16,7 +16,7 @@ class ArrayGrid<T> implements Grid2D<T>{
         assert(row >= 0 && row < this.rows, "row out of bounds");
         assert(column >= 0 && column < this.columns, "column out of bounds")
         assert(idx >= 0 && idx < this.values.length, "out of bounds");
-        return this.values[idx] ?? assert.fail();
+        return this.values[idx] ?? fail();
     }
     forEach(consumer: (row: number, col: number, value: T) => void): void {
         this.values.forEach((val, idx) => {
