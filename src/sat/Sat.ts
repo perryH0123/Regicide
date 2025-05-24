@@ -32,12 +32,36 @@ export class SatFormula {
      * literal name that is included in the formula if the formula is unsolved.
      * @returns A SatFormula representing the result of the encoding of the conjunction
      * @throws ContradictionError if a contradiction is discovered in any clause
+     * @see {@link buildFromClauses}
      */
     public static buildFormula(clauses: [string, boolean][][], hueristic?: (clauses: Clause[]) => string): SatFormula {
         const clauseObjs = clauses.filter(Boolean).map(arr => new Clause(arr)); // make sure no empty clauses are present
         return new SatFormula(clauseObjs, hueristic);
     }
 
+    /**
+     * Constructs a SAT formula from an array of predefined Clauses
+     * @param clauses a collection of Clauses
+     * @param hueristic A hueristic, that when provided an array of clauses, returns a string name of a variable
+     * to test given the formula. For the formula to not encounter any cycles, the hueristic function must produce a unique
+     * literal name that is included in the formula if the formula is unsolved.
+     * @returns A SatFormula representing the result of the encoding of the conjunction
+     * @throws ContradictionError if a contradiction is discovered in any clause
+     * @see {@link buildFormula}
+     */
+    public static buildFromClauses(clauses: Clause[], hueristic?: (clauses: Clause[]) => string): SatFormula{
+        return new SatFormula(clauses, hueristic);
+    }
+
+    /**
+     * Unions the given formula with another, replacing the hueristic with that of this or another function if provided.
+     * @param other: The other SatFormula to union with. It's hueristic will be replaced.
+     * @returns A new SatFormula with the hueristic of this and the clauses of both SatFormulas combined
+     */
+    public union(other: SatFormula): SatFormula{
+        return new SatFormula(this.clauses.concat(...other.clauses), this.hueristic);
+    }
+ 
     private constructor(private readonly clauses: Clause[], hueristic?: (clauses: Clause[]) => string) {
         if (hueristic) this.hueristic = hueristic;
     }
@@ -125,8 +149,7 @@ export class SatFormula {
      * @returns a string representation of the formula
      */
     public toString(): string {
-        let str = "SatFormula(";
-        this.clauses.map(c => `${c.toString()}`).join("\n and")
+        const str = "SatFormula("+ this.clauses.map(c => `${c.toString()}`).join("\n and");
         return str + "\n)"
     }
 
@@ -208,7 +231,7 @@ export class Clause {
      * Returns a string representation of this Clause.
      */
     public toString(){
-        let str = Array.from(this.literalMap.entries()).map(pair => {
+        const str = Array.from(this.literalMap.entries()).map(pair => {
             const [variable, value] = pair;
             return value ? variable : `not ${variable}`
         }).join(" or ");

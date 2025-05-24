@@ -1,5 +1,8 @@
 {
-    "entryPoints": ["./src/**/*.{ts,d.ts}"],
-    "out": "./docs",
-    "name": "Regicide"
-}
+    "entryPoints": ["src/**/module.ts"],
+    "entryPointStrategy": "expand",
+    "out": "docs",
+    "name": "Regicide",
+    "categorizeByGroup": false,
+  }
+  
