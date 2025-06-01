@@ -9,6 +9,10 @@ export type ZipCell = {
     up: boolean,
     down: boolean
 };
+export type ZipSolution = {
+    origin: Cell,
+    moves: MOVES[]
+}
 
 export class LinkedInZipSolver implements GridPuzzleSolver {
 
@@ -39,7 +43,7 @@ enum MOVES {
 /**
  * BFS implementation of solver for zip
  */
-export class ZipAlgorithm implements SolveAlgorithm<ZipCell, Array<MOVES>> {
+export class ZipAlgorithm implements SolveAlgorithm<ZipCell, ZipSolution> {
 
     private readonly instance: ZipAlgorithm;
 
@@ -57,26 +61,32 @@ export class ZipAlgorithm implements SolveAlgorithm<ZipCell, Array<MOVES>> {
     }
 
 
-    public getSolution(puzzle: Grid2D<ZipCell>): Grid2D<ZipCell> | undefined {
+    public getSolution(puzzle: Grid2D<ZipCell>): ZipSolution | undefined {
         const queue: QueueItem[] = [];
         // boardHash: 
         const visited = new Set<symbol>();
         const orders = this.getPuzzleOrders(puzzle);
         const origin = orders.get(1) ?? fail("puzzle does not have a 1 (starting point");
-        const end = Math.max(...orderMap.keys().toArray());
+        const end = Math.max(...orders.keys().toArray());
 
         const victoryCheck = (head: number) => head >= end;
-        if(victoryCheck(1)) return puzzle;
+        if(victoryCheck(1)) return {origin, moves: []};
 
-        function getMoves() {
 
-        }
         visited.add(ZipAlgorithm.hashState(1, origin));
         queue.push([1, origin, []]);
 
         while (queue){
             const [currentOrder, currentHead, currentMoves] = queue[0] ?? fail();
             //TODO: BFS Implementation with getFourDirectionalNeighbors
+            for (const [neighborCell, move] of getFourDirectionalNeighbors(currentHead, puzzle)){
+                // need to add move
+                
+                const hash = ZipAlgorithm.hashState(neighborCell.order, )
+                if(!(neighborCell.order === currentOrder+1 || neighborCell.order === 0)) continue;
+                const newOrder === (neighborCell.order === 0) ? currentOrder : currentOrder + 1;
+
+            }
         }
 
 
@@ -105,8 +115,8 @@ export class ZipAlgorithm implements SolveAlgorithm<ZipCell, Array<MOVES>> {
  * @param cell the cell, incicated by [row, col] to check, where the position is encoded as positive integers and 0 that are in the range of the board
  * @param board the parent board to check
  */
-function getFourDirectionalNeighbors(cell: Cell, board: Grid2D<ZipCell>): Set<[Cell, MOVES]> {
-    const neighbors = new Set<[Cell, MOVES]>();
+function getFourDirectionalNeighbors(cell: Cell, board: Grid2D<ZipCell>): Set<[ZipCell, MOVES]> {
+    const neighbors = new Set<[ZipCell, MOVES]>();
     const thisZipCell = board.get(...cell);
     function addNeighborIfValid(rShift: number, cShift: number, wallProperty: MOVES){
         if(!thisZipCell[wallProperty]) return;
@@ -114,11 +124,24 @@ function getFourDirectionalNeighbors(cell: Cell, board: Grid2D<ZipCell>): Set<[C
         const newCol = cell[1] + cShift;
         if(newRow < 0 || newRow >= board.rows) return;
         if(newCol < 0 || newCol >= board.columns) return;
-        neighbors.add([[newRow, newCol], wallProperty]);
+        neighbors.add([board.get(newRow,newCol) ?? fail(), wallProperty]);
     }
     addNeighborIfValid(-1, 0, MOVES.UP);
     addNeighborIfValid(0, 1, MOVES.RIGHT);
     addNeighborIfValid(1, 0, MOVES.DOWN);
     addNeighborIfValid(0, -1, MOVES.LEFT);
     return neighbors;
+}
+
+function getNewHead(currentHead: Cell, move: MOVES): Cell {
+    switch(move){
+        case MOVES.UP:
+            return [currentHead[0]-1, currentHead[1]];
+        case MOVES.DOWN:
+            return [currentHead[0]+1, currentHead[1]];
+        case MOVES.LEFT:
+            return [currentHead[0], currentHead[1]-1];
+        case MOVES.RIGHT:
+            return [currentHead[0], currentHead[1]+1];
+    }
 }
