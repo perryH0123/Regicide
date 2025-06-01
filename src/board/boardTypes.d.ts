@@ -30,14 +30,14 @@ export interface GridPuzzleGame<T> {
  * A specific implementation of a grid-based puzzle solver for a speficic domain of puzzles
  * Algorithms should be singleton objects
  */
-export interface SolveAlgorithm<T> {
+export interface SolveAlgorithm<T, S> {
     /**
      * Given a 2D Grid representing a (partially solved) puzzle, attempts to find a solution
      * from the given grid as a starting point
      * @param puzzle puzzle to find a solution
      * @returns a 2D Grid that represents the solution of the puzzle, or undefined if the puzzle is unsolvable
      */
-    getSolution(puzzle: Grid2D<T>): Grid2D<T> | undefined;
+    getSolution(puzzle: Grid2D<T>): S | undefined;
 }
 
 /**
@@ -58,7 +58,7 @@ export interface Grid2D<T> {
      * Retrieves the value at the specified cell
      * @param row Row to retrieve, starting from the top
      * @param column Column to retrieve, starting from the bottom
-     * @throws Error if row and column are out of bounds or 
+     * @throws Error if row and column are out of bounds
      */
     get(row: number, column: number): T;
 

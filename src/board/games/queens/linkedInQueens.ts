@@ -6,7 +6,7 @@ import { triggerMouseEvent } from "../../../util/util";
 
 export class LinkedInQueensSolver implements GridPuzzleSolver {
     private readonly client: GridPuzzleGame<QueensCell>;
-    private readonly algorithm: SolveAlgorithm<QueensCell>;
+    private readonly algorithm: SolveAlgorithm<QueensCell, Grid2D<QueensCell>>;
 
     public constructor(
         document: Document

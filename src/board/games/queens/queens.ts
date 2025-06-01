@@ -13,7 +13,7 @@ type RegionMapping = Map<number, [number, number][]>;
 /**
  * SAT Solver using basic DPLL for Queens (1-Star Star Battle)
  */
-export class QueensSATAlgorithm implements SolveAlgorithm<QueensCell> {
+export class QueensSATAlgorithm implements SolveAlgorithm<QueensCell, Grid2D<QueensCell>> {
 
     /**
      * From a grid, construct a mapping of colors to rows and columns of cells
